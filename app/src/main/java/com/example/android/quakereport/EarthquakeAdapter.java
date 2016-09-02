@@ -37,8 +37,20 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         TextView magnitudeTextView = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitudeTextView.setText(currentEarthquake.getMagnitude());
 
-        TextView locationTextView = (TextView) listItemView.findViewById(R.id.location);
-        locationTextView.setText(currentEarthquake.getLocation());
+        TextView locationOffsetView = (TextView) listItemView.findViewById(R.id.location_offset);
+        TextView primaryLocationView = (TextView) listItemView.findViewById(R.id.primary_location);
+        String rawLocation = currentEarthquake.getLocation();
+        String locationOffset, primaryLocation;
+        if (rawLocation.contains(" of ")) {
+            locationOffset = rawLocation.substring(0, rawLocation.indexOf(" of ") + 3);
+            primaryLocation = rawLocation.substring(rawLocation.indexOf(" of ") + 4, rawLocation.length());
+        }
+        else {
+            locationOffset = "Near the";
+            primaryLocation = rawLocation;
+        }
+        locationOffsetView.setText(locationOffset);
+        primaryLocationView.setText(primaryLocation);
 
         Date date = new Date(currentEarthquake.getDate());
 
