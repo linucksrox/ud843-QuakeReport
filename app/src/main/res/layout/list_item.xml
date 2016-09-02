@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:minHeight="@dimen/list_item_height"
-              android:orientation="horizontal">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="@dimen/list_item_height"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/magnitude"
@@ -13,7 +13,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:paddingLeft="16dp"
-        tools:text="magnitude"/>
+        tools:text="magnitude" />
 
     <TextView
         android:id="@+id/location"
@@ -21,14 +21,30 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        tools:text="location"/>
+        tools:text="location" />
 
-    <TextView
-        android:id="@+id/date"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:text="date"/>
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingRight="16dp"
+            tools:text="Jan 3, 2015" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingRight="16dp"
+            tools:text="4:56 PM" />
+    </LinearLayout>
 
 </LinearLayout>
