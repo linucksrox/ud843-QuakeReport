@@ -58,8 +58,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         if (rawLocation.contains(" of ")) {
             locationOffset = rawLocation.substring(0, rawLocation.indexOf(" of ") + 3);
             primaryLocation = rawLocation.substring(rawLocation.indexOf(" of ") + 4, rawLocation.length());
-        }
-        else {
+        } else {
             locationOffset = "Near the";
             primaryLocation = rawLocation;
         }
