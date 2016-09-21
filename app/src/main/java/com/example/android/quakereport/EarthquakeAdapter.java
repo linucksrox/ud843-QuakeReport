@@ -92,6 +92,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     private int getMagnitudeColor(double magnitude) {
         int magInt = (int) magnitude;
         switch (magInt) {
+            case 0:
             case 1:
                 return ContextCompat.getColor(getContext(), R.color.magnitude1);
             case 2:
@@ -113,7 +114,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             case 10:
                 return ContextCompat.getColor(getContext(), R.color.magnitude10plus);
             default:
-                return 0;
+                return ContextCompat.getColor(getContext(), R.color.magnitude10plus);
         }
     }
 }
