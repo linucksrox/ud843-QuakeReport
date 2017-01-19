@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
+=======
+>>>>>>> 3c91c822935d8f4a7b81432136224235920497e1
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
