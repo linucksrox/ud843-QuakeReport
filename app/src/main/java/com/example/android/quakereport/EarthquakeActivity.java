@@ -22,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EarthquakeActivity extends AppCompatActivity {
 
@@ -57,7 +56,7 @@ public class EarthquakeActivity extends AppCompatActivity {
             }
 
             // request data using QueryUtils methods
-            ArrayList<Earthquake> earthquakeList = QueryUtils.fetchEarthquakeData(urls[0]);
+            ArrayList<Earthquake> earthquakeList = QueryUtils.extractEarthquakes(urls[0]);
 
             return earthquakeList;
         }
