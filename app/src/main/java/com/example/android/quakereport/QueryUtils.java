@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper methods related to requesting and receiving earthquake data from USGS.
@@ -33,11 +34,9 @@ public final class QueryUtils {
     }
 
     /**
-     * Return a list of {@link Earthquake} objects that has been built up from
-     * parsing a JSON response.
+     * Query the USGS dataset and return a list of {@link Earthquake} objects
      */
-    public static ArrayList<Earthquake> extractEarthquakes(String requestUrl) {
-
+    public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -45,12 +44,30 @@ public final class QueryUtils {
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(url);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error closing input stream", e);
+        } catch(IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
-        ArrayList<Earthquake> earthquakes = new ArrayList<>();
+        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        List<Earthquake> earthquakes = extractFeatureFromJson(jsonResponse);
+
+        // Return the list of {@link Earthquake}s
+        return earthquakes;
+    }
+
+    /**
+     * Return a list of {@link Earthquake} objects that has been built up from
+     * parsing a JSON response.
+     */
+    public static List<Earthquake> extractFeatureFromJson(String earthquakeJSON) {
+
+        // If the JSON string is empty or null, then return early
+        if (TextUtils.isEmpty(earthquakeJSON)) {
+            return null;
+        }
+
+        // Create an empty ArrayList that wen can start adding earthquakes to
+        List<Earthquake> earthquakes = new ArrayList<>();
 
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -60,7 +77,7 @@ public final class QueryUtils {
             // TODO: Parse the response given by the SAMPLE_JSON_RESPONSE string and
             // build up a list of Earthquake objects with the corresponding data.
 
-            JSONObject baseResponse = new JSONObject(jsonResponse);
+            JSONObject baseResponse = new JSONObject(earthquakeJSON);
             JSONArray earthquakeArray = baseResponse.getJSONArray("features");
             for (int i = 0; i < earthquakeArray.length(); i++) {
                 JSONObject currentObject = earthquakeArray.getJSONObject(i);
@@ -92,7 +109,7 @@ public final class QueryUtils {
         try {
             url = new URL(stringUrl);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Error with creating URL ", e);
+            Log.e(LOG_TAG, "Problem building the URL ", e);
         }
         return url;
     }
