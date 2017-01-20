@@ -15,7 +15,6 @@
  */
 package com.example.android.quakereport;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
