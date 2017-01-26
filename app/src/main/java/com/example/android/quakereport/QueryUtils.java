@@ -37,6 +37,7 @@ public final class QueryUtils {
      * Query the USGS dataset and return a list of {@link Earthquake} objects
      */
     public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
+        Log.i(LOG_TAG, "fetchEarthquakeData");
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -95,7 +96,7 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
         }
 
         // Return the list of earthquakes

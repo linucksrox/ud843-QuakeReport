@@ -22,6 +22,7 @@ import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
     public static final int EARTHQUAKE_LOADER_ID = 1;
     public static final String USGS_REQUEST_URL = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=10";
     private EarthquakeAdapter earthquakeAdapter;
+    private static final String LOG_TAG = EarthquakeActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +75,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         LoaderManager loaderManager = getLoaderManager();
 
         // Initiate the Loader
+        Log.i(LOG_TAG, "initLoader");
         loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
     }
 
     @Override
     public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
+        Log.i(LOG_TAG, "onCreateLoader");
         // return a new Loader instance
         return new EarthquakeLoader(this, USGS_REQUEST_URL);
     }
 
     @Override
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> earthquakes) {
+        Log.i(LOG_TAG, "onLoadFinished");
         // Clear the adapter of previous earthquake data
         earthquakeAdapter.clear();
 
@@ -96,6 +101,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
 
     @Override
     public void onLoaderReset(Loader<List<Earthquake>> loader) {
+        Log.i(LOG_TAG, "onLoaderReset");
         // The Loader is being reset, so clear out current data
         earthquakeAdapter.clear();
     }
