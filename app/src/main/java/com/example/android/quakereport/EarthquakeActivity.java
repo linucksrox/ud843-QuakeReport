@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
+
+        // Set the empty view for when no data is returned from the API
+        earthquakeListView.setEmptyView(findViewById(R.id.empty_view));
 
         // Create a new {@link ArrayAdapter} of earthquakes
         earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
@@ -97,6 +101,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         if (earthquakes != null && !earthquakes.isEmpty()) {
             earthquakeAdapter.addAll(earthquakes);
         }
+
+        TextView emptyView = (TextView) findViewById(R.id.empty_view);
+        emptyView.setText("No Earthquakes Found");
     }
 
     @Override
