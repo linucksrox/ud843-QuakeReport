@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -79,20 +80,25 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         LoaderManager loaderManager = getLoaderManager();
 
         // Initiate the Loader
-        Log.i(LOG_TAG, "initLoader");
+        //Log.i(LOG_TAG, "initLoader");
         loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
     }
 
     @Override
     public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
-        Log.i(LOG_TAG, "onCreateLoader");
+        //Log.i(LOG_TAG, "onCreateLoader");
         // return a new Loader instance
         return new EarthquakeLoader(this, USGS_REQUEST_URL);
     }
 
     @Override
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> earthquakes) {
-        Log.i(LOG_TAG, "onLoadFinished");
+        //Log.i(LOG_TAG, "onLoadFinished");
+
+        // Hide the ProgressBar
+        ProgressBar pbar = (ProgressBar) findViewById(R.id.progress_bar);
+        pbar.setVisibility(ProgressBar.GONE);
+
         // Clear the adapter of previous earthquake data
         earthquakeAdapter.clear();
 
@@ -108,7 +114,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
 
     @Override
     public void onLoaderReset(Loader<List<Earthquake>> loader) {
-        Log.i(LOG_TAG, "onLoaderReset");
+        //Log.i(LOG_TAG, "onLoaderReset");
         // The Loader is being reset, so clear out current data
         earthquakeAdapter.clear();
     }
