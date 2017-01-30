@@ -96,8 +96,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         //Log.i(LOG_TAG, "onLoadFinished");
 
         // Hide the ProgressBar
-        ProgressBar pbar = (ProgressBar) findViewById(R.id.progress_bar);
-        pbar.setVisibility(ProgressBar.GONE);
+        View pbar = findViewById(R.id.progress_bar);
+        pbar.setVisibility(View.GONE);
 
         // Clear the adapter of previous earthquake data
         earthquakeAdapter.clear();
