@@ -17,8 +17,11 @@ package com.example.android.quakereport;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +40,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
     public static final int EARTHQUAKE_LOADER_ID = 1;
     public static final String USGS_REQUEST_URL = "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=4&limit=10";
     private EarthquakeAdapter earthquakeAdapter;
+    private TextView emptyView;
     private static final String LOG_TAG = EarthquakeActivity.class.getName();
 
     @Override
@@ -47,8 +51,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
+        // check network connection status
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            // connected, good to go
+        }
+        else {
+            // network connection not available
+            emptyView.setText("No network nonnection available. Please try again later.");
+        }
+
         // Set the empty view for when no data is returned from the API
-        earthquakeListView.setEmptyView(findViewById(R.id.empty_view));
+        emptyView = (TextView) findViewById(R.id.empty_view);
+        earthquakeListView.setEmptyView(emptyView);
 
         // Create a new {@link ArrayAdapter} of earthquakes
         earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
@@ -108,7 +124,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
             earthquakeAdapter.addAll(earthquakes);
         }
 
-        TextView emptyView = (TextView) findViewById(R.id.empty_view);
         emptyView.setText("No Earthquakes Found");
     }
 
