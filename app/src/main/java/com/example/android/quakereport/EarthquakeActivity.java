@@ -51,53 +51,61 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
+        // get a handle for the empty text view
+        emptyView = (TextView) findViewById(R.id.empty_view);
+
         // check network connection status
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
             // connected, good to go
+
+            // Set the empty view for when no data is returned from the API
+            earthquakeListView.setEmptyView(emptyView);
+
+            // Create a new {@link ArrayAdapter} of earthquakes
+            earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
+
+            // Set the adapter on the {@link ListView}
+            // so the list can be populated in the user interface
+            earthquakeListView.setAdapter(earthquakeAdapter);
+
+            // Set an item click listener on the ListView, which sends an intent to a web browser
+            // to open a website with more information about the selected earthquake.
+            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    // Find the current earthquake that was clicked on
+                    Earthquake currentEarthquake = earthquakeAdapter.getItem(position);
+
+                    // Convert the String URL into a URI object (to pass into the Intent constructor)
+                    Uri earthquakeUri = Uri.parse(currentEarthquake.getUrl());
+
+                    // Create a new intent to view the earthquake URI
+                    Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+
+                    // Send the intent to launch a new activity
+                    startActivity(websiteIntent);
+                }
+            });
+
+            // Get a handle to the LoaderManager
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initiate the Loader
+            //Log.i(LOG_TAG, "initLoader");
+            loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
         }
         else {
             // network connection not available
-            emptyView.setText("No network nonnection available. Please try again later.");
+
+            // Hide the ProgressBar
+            View pbar = findViewById(R.id.progress_bar);
+            pbar.setVisibility(View.GONE);
+
+            // tell user no network is available
+            emptyView.setText(R.string.no_network);
         }
-
-        // Set the empty view for when no data is returned from the API
-        emptyView = (TextView) findViewById(R.id.empty_view);
-        earthquakeListView.setEmptyView(emptyView);
-
-        // Create a new {@link ArrayAdapter} of earthquakes
-        earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
-
-        // Set the adapter on the {@link ListView}
-        // so the list can be populated in the user interface
-        earthquakeListView.setAdapter(earthquakeAdapter);
-
-        // Set an item click listener on the ListView, which sends an intent to a web browser
-        // to open a website with more information about the selected earthquake.
-        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // Find the current earthquake that was clicked on
-                Earthquake currentEarthquake = earthquakeAdapter.getItem(position);
-
-                // Convert the String URL into a URI object (to pass into the Intent constructor)
-                Uri earthquakeUri = Uri.parse(currentEarthquake.getUrl());
-
-                // Create a new intent to view the earthquake URI
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
-
-                // Send the intent to launch a new activity
-                startActivity(websiteIntent);
-            }
-        });
-
-        // Get a handle to the LoaderManager
-        LoaderManager loaderManager = getLoaderManager();
-
-        // Initiate the Loader
-        //Log.i(LOG_TAG, "initLoader");
-        loaderManager.initLoader(EARTHQUAKE_LOADER_ID, null, this);
     }
 
     @Override
@@ -124,7 +132,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderCallb
             earthquakeAdapter.addAll(earthquakes);
         }
 
-        emptyView.setText("No Earthquakes Found");
+        emptyView.setText(R.string.no_earthquakes);
     }
 
     @Override
